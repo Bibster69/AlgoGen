@@ -23,6 +23,8 @@ public class Specimen {
         for(int i = 0; i < 50; i++){
             if (i % 2 == 0){
                 this.grade += this.chromosom.get(i);
+            } else {
+                this.grade -= this.chromosom.get(i);
             }
         }
     }
@@ -33,6 +35,8 @@ public class Specimen {
             int gene = (random.nextInt((99 - 10) + 1) + 10);
             if (i % 2 == 0){
                 this.grade += gene;
+            } else {
+                this.grade -= gene;
             }
             this.chromosom.add(gene);
         }
@@ -45,5 +49,13 @@ public class Specimen {
             population.add(new Specimen());
         }
         return population;
+    }
+
+    public static int populationGrade(ArrayList<Specimen> population){
+        int sum = 0;
+        for (Specimen specimen : population){
+            sum += specimen.getGrade();
+        }
+        return sum;
     }
 }

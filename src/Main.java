@@ -1,4 +1,15 @@
+import java.util.ArrayList;
+
 public class Main {
+
+    public static Specimen roulette(int populationSize, int numOfGenerations){
+        int bestPossibleGrade = (25 * 10) + (25 * 99);
+        for(int i = 0; i < numOfGenerations; i++) {
+            ArrayList<Specimen> population = Specimen.generatePopulation(populationSize);
+
+        }
+        return;
+    }
     public static void main(String[] args) {
         System.out.println(Integer.parseInt("1111111", 2));
 
