@@ -2,10 +2,16 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Specimen {
-    public int grade;
+    public String name;
+    public Double grade = 0.0;
+
+    public String getName() {
+        return name;
+    }
+
     public ArrayList<Integer> chromosom;
 
-    public int getGrade() {
+    public Double getGrade() {
         return grade;
     }
 
@@ -13,10 +19,10 @@ public class Specimen {
         return chromosom;
     }
 
-    public Specimen(Boolean empty){
+    public Specimen(Boolean empty, String name){
+        this.name = name;
         Boolean dummy = empty;
         this.chromosom = new ArrayList<>();
-        this.grade = 0;
     }
 
     public void countGrade(){
@@ -27,9 +33,13 @@ public class Specimen {
                 this.grade -= this.chromosom.get(i);
             }
         }
+        if (this.grade < 0) {
+            this.grade = Math.abs(this.grade/100.0);
+        }
     }
-    public Specimen() {
+    public Specimen(String name) {
         Random random = new Random();
+        this.name = name;
         this.chromosom = new ArrayList<>();
         for(int i = 0; i < 50; i++){
             int gene = (random.nextInt((99 - 10) + 1) + 10);
@@ -40,22 +50,14 @@ public class Specimen {
             }
             this.chromosom.add(gene);
         }
-    }
-
-
-    public static ArrayList<Specimen> generatePopulation(int populationSize){
-        ArrayList<Specimen> population = new ArrayList<>();
-        for (int i = 0; i < populationSize; i++) {
-            population.add(new Specimen());
+        if (this.grade < 0) {
+            this.grade = Math.abs(this.grade/100.0);
         }
-        return population;
     }
 
-    public static int populationGrade(ArrayList<Specimen> population){
-        int sum = 0;
-        for (Specimen specimen : population){
-            sum += specimen.getGrade();
-        }
-        return sum;
+    public void print(){
+        System.out.println("osobnik + " + this.name);
+        System.out.println("Grade: " + this.grade);
     }
+
 }

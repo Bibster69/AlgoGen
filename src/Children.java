@@ -24,14 +24,14 @@ public class Children {
      * z krzyżowania jedno lub dwu punktowego
      */
 
-    public Children(Specimen parent1, Specimen parent2, int mutationPoint){
+    public Children(Specimen parent1, Specimen parent2, int mutationPoint, int specimenrNumber, int generationNumber){
         if (mutationPoint >= 48 || mutationPoint > 25) {
             System.out.println("Ograniczony zakres to np. dla chromosomu 111000 nie możemy wyciąć dwóch ostatnich oraz\n" +
                     "//wycięty fragment nie może być większy niż połowa wielkości chromosomu");
             return;
         }
-        this.child1 = new Specimen(true);
-        this.child2 = new Specimen(true);
+        this.child1 = new Specimen(true, "Skrzyrzowany osobnik nr " + specimenrNumber + " z pokolenia " + generationNumber);
+        this.child2 = new Specimen(true, "Skrzyrzowany osobnik nr " + Integer.toString(specimenrNumber + 1) + " z pokolenia " + generationNumber);
         for (int i = 0; i < mutationPoint; i++){
             this.child1.chromosom.add(parent1.chromosom.get(i));
             this.child2.chromosom.add(parent2.chromosom.get(i));
@@ -44,7 +44,7 @@ public class Children {
         this.child2.countGrade();
     }
 
-    public Children(Specimen parent1, Specimen parent2, int mutationPoint1, int mutationPoint2){
+    public Children(Specimen parent1, Specimen parent2, int mutationPoint1, int mutationPoint2, int specimenrNumber, int generationNumber){
 
         if ((mutationPoint1 >= 48) || (mutationPoint1 > 25) || (mutationPoint2 >= 48) || (Math.abs(mutationPoint1 - mutationPoint2) > 25)) {
             System.out.println("Ograniczony zakres to np. dla chromosomu 111000 nie możemy wyciąć dwóch ostatnich oraz\n" +
@@ -58,8 +58,8 @@ public class Children {
             mutationPoint2 = tmp;
         }
 
-        this.child1 = new Specimen(true);
-        this.child2 = new Specimen(true);
+        this.child1 = new Specimen(true, "Skrzyrzowany osobnik nr " + specimenrNumber + " z pokolenia " + generationNumber);
+        this.child2 = new Specimen(true, "Skrzyrzowany osobnik nr " + Integer.toString(specimenrNumber + 1) + " z pokolenia " + generationNumber);
         for (int i = 0; i < mutationPoint1; i++){
             this.child1.chromosom.add(parent1.chromosom.get(i));
             this.child2.chromosom.add(parent2.chromosom.get(i));
