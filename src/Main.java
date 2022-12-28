@@ -17,44 +17,86 @@ public class Main {
         Random random = new Random();
         int bestPossibleGrade = (25 * 10) + (25 * 99);
         Population population = new Population(populationSize, numOfGenerations, true);
-        TreeMap<Specimen, Double> slices = new TreeMap<>();
+        List<Double> slices = new ArrayList<>();
         double upperBoundSum = 0;
         for(int i = 0; i < population.getMembers().size(); i++){
             double upperBound = (population.getMembers().get(i).getGrade() / population.getPopulationGrade()) * 100;
             upperBoundSum += Math.abs(upperBound);
-            slices.put(population.getMembers().get(i), upperBoundSum);
+            slices.add(upperBoundSum);
         }
 
         population.print(1);
         System.out.println("Best osobnik: ");
+
         population.getBestSpecimen().print();
         System.out.println("slices:");
-//        slices.entrySet().forEach(entry -> {
-//            System.out.println(entry.getKey() + " " + entry.getValue());
-//        });
+
 
         System.out.println("UpperBoundSum:");
         System.out.println(upperBoundSum);
-        for(int i = 0; i < numOfGenerations - 1; i++) {
-            Population tmpPop = new Population(populationSize, i+2, false);
-            for (int j = 0; j < populationSize; j++){
+        for(int generationNumber = 0; generationNumber < numOfGenerations - 1; generationNumber++) {
+            Population tmpPop = new Population(populationSize, generationNumber+2, false);
+            for (int j = 0; j < populationSize; j++) {
                 double randomSpecimen = 0 + (upperBoundSum - 0) * random.nextDouble();
-                slices.entrySet().forEach(entry -> {
-                    if (randomSpecimen <= entry.getValue() && !tmpPop.getMembers().contains(entry.getKey())){
-                        tmpPop.addMember(entry.getKey());
+                System.out.println("random specimen" + randomSpecimen);
+                for (int z = 0; z < slices.size(); z++) {
+                    if (randomSpecimen <= slices.get(z) && !tmpPop.getMembers().contains(population.getMembers().get(z))) {
+                        System.out.println("tmpPop member");
+                        population.getMembers().get(z).print();
+                        tmpPop.addMember(population.getMembers().get(z));
+                        break;
                     }
-                });
-                int parent1Index = random.nextInt(tmpPop.getMembers().size());
-                int parent2Index = random.nextInt(tmpPop.getMembers().size());
-                while (parent1Index == parent2Index){
-                    parent2Index = random.nextInt(tmpPop.getMembers().size());
                 }
             }
-
+            int tmpPopSize = tmpPop.getMembers().size();
+            System.out.println("Tmppopsize: " + tmpPopSize);
+            int parent1Index = random.nextInt((tmpPopSize));
+            int parent2Index = 0;
+            if (parent1Index == tmpPopSize-1){
+                parent2Index = parent1Index - 1;
+            } else {
+                parent2Index = parent1Index + 1;
+            }
+            Children children = new Children(tmpPop.getMembers().get(parent1Index), tmpPop.getMembers().get(parent2Index), random.nextInt((25 - 5) + 1) + 5, populationSize, generationNumber);
+            if (populationSize - tmpPopSize > 2){
+                tmpPop.addMember(children.child1);
+                tmpPop.addMember(children.child2);
+                tmpPopSize = tmpPop.getMembers().size();
+                while (tmpPopSize < populationSize) {
+                    tmpPop.generateMember(generationNumber, tmpPopSize);
+                    tmpPopSize++;
+                }
+            } else if (populationSize - tmpPopSize == 2) {
+                tmpPop.addMember(children.child1);
+                tmpPop.addMember(children.child2);
+            } else if (populationSize - tmpPopSize == 1) {
+                tmpPop.addMember(children.child1);
+                for (Specimen specimen : tmpPop.getMembers()){
+                    if(specimen.getGrade() <= children.child2.getGrade()){
+                        specimen = children.child2;
+                        break;
+                    }
+                }
+            } else if (populationSize  == tmpPopSize) {
+                for (Specimen specimen : tmpPop.getMembers()){
+                    if(specimen.getGrade() <= children.child1.getGrade()){
+                        specimen = children.child1;
+                        break;
+                    }
+                }
+                for (Specimen specimen : tmpPop.getMembers()){
+                    if(specimen.getGrade() <= children.child2.getGrade() && specimen.getGrade() != children.child1.getGrade()){
+                        specimen = children.child2;
+                        break;
+                    }
+                }
+            }
+            System.out.println("parent1 index " + parent1Index);
+            System.out.println("parent2 index " + parent2Index);
         }
     }
     public static void main(String[] args) {
-        roulette(8, 1, false);
+        roulette(8, 2, false);
 
 
     }

@@ -40,7 +40,12 @@ public class Population {
 
     public void addMember(Specimen member){
         this.members.add(member);
+        System.out.println("dodawanie osobnika");
         //setBestSpecimen();
+    }
+
+    public void generateMember(int generationNumber, int specimenNumber){
+        this.members.add(new Specimen("Pokolenie " + Integer.toString(generationNumber) + " osobnik " + Integer.toString(specimenNumber+1)));
     }
 
 
