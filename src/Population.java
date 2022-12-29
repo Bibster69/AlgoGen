@@ -40,7 +40,6 @@ public class Population {
 
     public void addMember(Specimen member){
         this.members.add(member);
-        System.out.println("dodawanie osobnika");
         //setBestSpecimen();
     }
 

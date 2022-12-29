@@ -56,8 +56,9 @@ public class Specimen {
     }
 
     public void print(){
-        System.out.println("osobnik + " + this.name);
+        System.out.println(this.name);
         System.out.println("Grade: " + this.grade);
+        System.out.println("Chromosom: " + this.chromosom);
     }
 
 }
