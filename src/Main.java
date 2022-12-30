@@ -103,10 +103,18 @@ public class Main {
             Specimen[] winners = new Specimen[teamCount];
             for (int i = 0; i < teamCount; i++) {
                 double winningGrade = 0;
+                ArrayList<Integer> teamIndices = new ArrayList<>();
                 for (int j = 0; j < teamSize; j++) {
-                    if (population.getMembers().get(j).getGrade() > winningGrade){
-                        winningGrade = population.getMembers().get(j).getGrade();
-                        winners[i] = population.getMembers().get(j);
+                    int randomIndex = random.nextInt(population.getMembers().size());
+                    while (teamIndices.contains(randomIndex)){
+                        randomIndex = random.nextInt(population.getMembers().size());
+                    }
+                    teamIndices.add(randomIndex);
+                }
+                for(Integer member : teamIndices){
+                    if(population.getMembers().get(member).getGrade() > winningGrade){
+                        winningGrade = population.getMembers().get(member).getGrade();
+                        winners[i] = population.getMembers().get(member);
                     }
                 }
             }
@@ -120,13 +128,31 @@ public class Main {
             parents.add(hottie);
             hottiesCounter++;
             if(hottiesCounter == 2){
-
+                Children children = null;
+                if(twoPointInheritance) {
+                    int mutPoint1 = random.nextInt((25 - 5) + 1) + 5;
+                    int mutPoint2 = mutPoint1 + random.nextInt(20);
+                    children = new Children(parents.get(0), parents.get(1), mutPoint1, mutPoint2, populationSize-2, genNum);
+                } else if (!twoPointInheritance) {
+                    children = new Children(parents.get(0), parents.get(1), random.nextInt((25 - 5) + 1) + 5, populationSize-2, genNum);
+                }
+                population.getMembers().set(populationSize-2, children.child1);
+                population.getMembers().set(populationSize-1, children.child2);
+                population.setBestSpecimen();
+                if(population.getBestSpecimen().getGrade() == bestPossibleGrade){
+                    return population.getBestSpecimen();
+                }
             }
         }
+        return population.getBestSpecimen();
     }
+
+    public static void
     public static void main(String[] args) {
-        Specimen test = roulette(8, 6, true);
-        test.print();
+        Specimen testRoulette = roulette(8, 6, false);
+        testRoulette.print();
+        Specimen testTournament = tournament(8, 6, false);
+        testTournament.print();
 
 
     }
